@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flashcard-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flashcard
+  template:
+    metadata:
+      labels:
+        app: flashcard
+    spec:
+      containers:
+      - name: flashcard-container
+        image: altjin09/flashcard-app:latest
+        ports:
+        - containerPort: 5010
