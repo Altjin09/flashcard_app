@@ -38,4 +38,5 @@ def quiz():
     return render_template('quiz.html', cards=cards)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5010)
+    app.run(host='0.0.0.0', port=5010, debug=True)
+
