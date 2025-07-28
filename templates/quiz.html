@@ -1,0 +1,7 @@
+<h1>🧠 Quiz Mode</h1>
+{% for card in cards %}
+  <div class="card">
+    <div class="front">{{ card.question }}</div>
+    <div class="back">{{ card.answer }}</div>
+  </div>
+{% endfor %}

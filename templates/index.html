@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flashcards</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>📚 Flashcards</h1>
+  <div>
+    <a href="/add">➕ Add New Card</a>
+    <a href="/quiz">🧠 Quiz Mode</a>
+  </div>
+  <div class="card-container">
+    {% for card in cards %}
+      <div class="card">
+        <div class="card-inner">
+          <div class="front">{{ card.question }}</div>
+          <div class="back">{{ card.answer }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</body>
+
+</html>
