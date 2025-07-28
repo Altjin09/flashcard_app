@@ -54,11 +54,8 @@ jobs:
           tags: altjin09/flashcard-app:latest
   deploy-to-k3d:
     name: Deploy to k3d
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: docker-build-and-push
-    env:
-      KUBECONFIG: ${{ github.workspace }}/kubeconfig.yaml
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -70,10 +67,8 @@ jobs:
 
       - name: Decode KUBECONFIG
         run: |
-          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > $KUBECONFIG
-
-      - name: Test connection (optional)
-        run: kubectl get nodes
+          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > kubeconfig.yaml
+          export KUBECONFIG=$PWD/kubeconfig.yaml
 
       - name: Deploy to k3d cluster
         run: |
