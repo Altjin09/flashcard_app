@@ -1,0 +1,45 @@
+receivers:
+  github:
+    webhook:
+      endpoint: 0.0.0.0:19418
+      path: /events
+      health_path: /health
+      secret: ${GITHUB_WEBHOOK_SECRET}
+    scrapers:
+      scraper:
+        github_org: Altjin09
+        metrics:
+          vcs.contributor.count:
+            enabled: true
+        auth:
+          authenticator: bearertokenauth/github
+
+processors:
+  resource/github:
+    attributes:
+      - key: service.name
+        value: github-actions
+        action: insert
+
+exporters:
+  otlp:
+    endpoint: localhost:4317
+    tls:
+      insecure: true
+  debug:
+
+extensions:
+  bearertokenauth/github:
+    token: ${GH_PAT}
+
+service:
+  extensions: [bearertokenauth/github]
+  pipelines:
+    traces:
+      receivers: [github]
+      processors: []
+      exporters: [otlp]
+    metrics:
+      receivers: [github]
+      processors: [resource/github]
+      exporters: [otlp, debug]

@@ -13,7 +13,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Алхам 5: Порт нээх
-EXPOSE 5010
+EXPOSE 5020
 
 # Алхам 6: App-ыг ажиллуулах
 CMD ["python", "app.py"]
