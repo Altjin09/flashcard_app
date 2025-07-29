@@ -66,11 +66,19 @@ jobs:
           version: v1.30.0
 
       - name: Decode KUBECONFIG
-        run: |
-          echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > kubeconfig.yaml
-          export KUBECONFIG=$PWD/kubeconfig.yaml
+        run: echo "${{ secrets.KUBECONFIG_DATA }}" | base64 -d > kubeconfig.yaml
+
+      - name: Fix kubeconfig server IP
+        run: sed -i 's/0.0.0.0/127.0.0.1/g' kubeconfig.yaml
 
       - name: Deploy to k3d cluster
+        env:
+          KUBECONFIG: ${{ github.workspace }}/kubeconfig.yaml
+          OTEL_EXPORTER_OTLP_ENDPOINT: http://signoz-otel-collector.platform:4317
+          OTEL_EXPORTER_OTLP_INSECURE: true
+          OTEL_SERVICE_NAME: flask-ci-cd
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
+
+
